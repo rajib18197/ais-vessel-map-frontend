@@ -1,15 +1,56 @@
-import type {
-  VesselSummary,
-  GetAllVesselsResponse,
+import { ApiError } from "@/shared/api/api-error";
+import {
+  getAllVesselsResponseSchema,
+  type VesselSummary,
 } from "../types/vessel.types";
+import { API_BASE } from "@/shared/api/api-base";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3000";
-
+/**
+ * Fetches the full vessel list. Every failure path below is deliberately
+ * caught and re-thrown as `ApiError` — this is what makes
+ * `useQuery<VesselSummary[], ApiError>` in `useVessels` an honest contract
+ * rather than a type-level promise the implementation doesn't keep.
+ *
+ * Three distinct failure classes are handled, each with its own status
+ * semantics:
+ *   1. The request never reached the server (offline, DNS, CORS) → status 0
+ *   2. The server responded with a non-2xx status → that HTTP status
+ *   3. The server responded 2xx but the body isn't the shape we expect,
+ *      whether due to malformed JSON or a schema mismatch → the HTTP
+ *      status is preserved, since the response did arrive
+ */
 export async function getAllVessels(): Promise<VesselSummary[]> {
-  const res = await fetch(`${API_BASE}/api/vessels`);
-  if (!res.ok) {
-    throw new Error(`Failed to fetch vessels: ${res.status} ${res.statusText}`);
+  let res: Response;
+  try {
+    res = await fetch(`${API_BASE}/api/vessels`);
+  } catch (cause) {
+    throw new ApiError("Network request failed", 0, { cause });
   }
-  const json = (await res.json()) as GetAllVesselsResponse;
-  return json.data.vessels;
+
+  if (!res.ok) {
+    throw new ApiError(
+      `Failed to fetch vessels: ${res.status} ${res.statusText}`,
+      res.status,
+    );
+  }
+
+  let body: unknown;
+  try {
+    body = await res.json();
+  } catch (cause) {
+    throw new ApiError("Failed to parse vessel response as JSON", res.status, {
+      cause,
+    });
+  }
+
+  const parsed = getAllVesselsResponseSchema.safeParse(body);
+  if (!parsed.success) {
+    throw new ApiError(
+      `Vessel response did not match expected shape: ${parsed.error.message}`,
+      res.status,
+      { cause: parsed.error },
+    );
+  }
+
+  return parsed.data.data.vessels;
 }

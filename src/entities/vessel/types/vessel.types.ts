@@ -1,115 +1,213 @@
-export interface GeoPoint {
-  type: "Point";
-  coordinates: [number, number]; // [lon, lat] — GeoJSON order
-}
+import { z } from "zod";
 
-export interface VesselSummary {
-  mmsi: string;
-  name?: string | null;
-  vesselType?: number | null;
-  location?: GeoPoint;
-  sog?: number | null;
-  cog?: number | null;
-  heading?: number | null;
-  lastSeen: string; // ISO string — Date on backend, string after JSON parse
-}
+// ---------------------------------------------------------------------------
+// GeoPoint
+//
+// Mongoose's `InferSchemaType` widens GeoJSON coordinate tuples to
+// `number[]`, which is why the backend enforces the tuple shape locally via
+// `satisfies GeoPoint` at construction time. On the frontend we receive this
+// purely as parsed JSON over HTTP/WS, so Zod is the only thing standing
+// between "the server sent valid GeoJSON" and a runtime crash. The schema
+// enforces exactly two numbers — not `number[]` — so a malformed payload
+// fails parsing instead of silently becoming a 3-element array later.
+// ---------------------------------------------------------------------------
 
-// API response shapes
-export interface GetAllVesselsResponse {
-  status: "success";
-  results: number;
-  data: {
-    vessels: VesselSummary[];
-  };
-}
+export const geoPointSchema = z.object({
+  type: z.literal("Point"),
+  coordinates: z.tuple([z.number(), z.number()]), // [lon, lat] — GeoJSON order
+});
 
-// WebSocket event shapes
-export interface VesselSnapshotEvent {
-  event: "vessel:snapshot";
-  data: VesselSummary[];
-}
+export type GeoPoint = z.infer<typeof geoPointSchema>;
 
-export interface VesselUpdatedEvent {
-  event: "vessel:updated";
-  data: VesselSummary;
-}
+// ---------------------------------------------------------------------------
+// VesselSummary
+//
+// This is the single source of truth for the summary shape used in the list
+// view, the REST snapshot, and every WebSocket event payload. Deriving the
+// TypeScript type via `z.infer` means the compile-time type and the runtime
+// validator can never silently drift from each other — the failure mode
+// where `VesselSummary` says one thing and the server actually sends
+// another is closed off at the type level, not just by convention.
+//
+// This mirrors the backend's `vesselSummarySchema` (get-all-vessels.types.ts)
+// field-for-field, with one deliberate divergence: `lastSeen` is `z.string()`
+// here but `z.date()` on the backend. The backend schema validates Mongoose's
+// `.lean()` output, where `lastSeen` is still a real `Date` instance.
+// `JSON.stringify` always serializes `Date` to an ISO string before it ever
+// reaches the wire, so by the time this schema sees the payload — over HTTP
+// or WebSocket — it has already become a string. Same field, same schema
+// name, different runtime type at different stages of the pipeline; this is
+// intentional, not a drift bug.
+//
+// `name`, `vesselType`, `sog`, `cog`, and `heading` are `.nullable()` only —
+// NOT `.optional()`. The Mongoose schema sets `default: null` on every one
+// of these fields, so they are always present on every document, never
+// `undefined`. Marking them optional here would silently accept a payload
+// that's missing a field your backend can never actually produce, masking
+// a real bug if that ever changed. `location`, by contrast, IS `.optional()`
+// and NOT `.nullable()` — its Mongoose default is `undefined`, not `null`,
+// and lean output omits the key entirely rather than sending it as null.
+// ---------------------------------------------------------------------------
 
-export interface VesselCreatedEvent {
-  event: "vessel:created";
-  data: VesselSummary;
-}
+export const vesselSummarySchema = z.object({
+  mmsi: z.string(),
+  name: z.string().nullable(),
+  vesselType: z.number().nullable(),
+  location: geoPointSchema.optional(),
+  sog: z.number().nullable(),
+  cog: z.number().nullable(),
+  heading: z.number().nullable(),
+  lastSeen: z.string(), // ISO string — z.date() on the backend; see note above
+});
 
-export type VesselWsEvent =
-  | VesselSnapshotEvent
-  | VesselUpdatedEvent
-  | VesselCreatedEvent;
+export type VesselSummary = z.infer<typeof vesselSummarySchema>;
 
-// Runtime narrowing
+// ---------------------------------------------------------------------------
+// REST: GET /api/vessels
+// ---------------------------------------------------------------------------
+
+export const getAllVesselsResponseSchema = z.object({
+  status: z.literal("success"),
+  results: z.number(),
+  data: z.object({
+    vessels: z.array(vesselSummarySchema),
+  }),
+});
+
+export type GetAllVesselsResponse = z.infer<typeof getAllVesselsResponseSchema>;
+
+// ---------------------------------------------------------------------------
+// WebSocket events
+//
+// `z.discriminatedUnion` validates BOTH the `event` discriminant AND the
+// shape of `data` for that variant in a single pass. This closes the gap in
+// the previous hand-rolled `parseVesselWsEvent`, which checked only that
+// `event` was one of the three known strings and then cast `data` straight
+// through unchecked. A malformed `data` payload (wrong field types, missing
+// required fields, or — for `vessel:snapshot` specifically — a non-array)
+// now fails parsing and returns `null` instead of corrupting the React
+// Query cache with an object that *claims* to be a `VesselSummary[]` but
+// isn't.
+// ---------------------------------------------------------------------------
+
+export const vesselWsEventSchema = z.discriminatedUnion("event", [
+  z.object({
+    event: z.literal("vessel:snapshot"),
+    data: z.array(vesselSummarySchema),
+  }),
+  z.object({
+    event: z.literal("vessel:updated"),
+    data: vesselSummarySchema,
+  }),
+  z.object({
+    event: z.literal("vessel:created"),
+    data: vesselSummarySchema,
+  }),
+]);
+
+export type VesselWsEvent = z.infer<typeof vesselWsEventSchema>;
+export type VesselSnapshotEvent = Extract<
+  VesselWsEvent,
+  { event: "vessel:snapshot" }
+>;
+export type VesselUpdatedEvent = Extract<
+  VesselWsEvent,
+  { event: "vessel:updated" }
+>;
+export type VesselCreatedEvent = Extract<
+  VesselWsEvent,
+  { event: "vessel:created" }
+>;
+
+/**
+ * Runtime narrowing for inbound WebSocket frames. Returns `null` for
+ * anything that isn't a fully valid `VesselWsEvent` — including a
+ * recognized `event` discriminant paired with a malformed `data` payload.
+ * Callers should treat `null` as "drop this frame," not as an exception
+ * worth surfacing; a single malformed frame from a noisy feed shouldn't
+ * tear down the connection.
+ */
 export function parseVesselWsEvent(raw: unknown): VesselWsEvent | null {
-  if (typeof raw !== "object" || raw === null) return null;
-  const obj = raw as Record<string, unknown>;
-  const event = obj["event"];
-  if (
-    event === "vessel:snapshot" ||
-    event === "vessel:updated" ||
-    event === "vessel:created"
-  ) {
-    return raw as VesselWsEvent;
-  }
-  return null;
+  const result = vesselWsEventSchema.safeParse(raw);
+  return result.success ? result.data : null;
 }
 
-export interface VesselDetail {
-  mmsi: string;
-  name: string | null;
-  location?: GeoPoint;
-  sog: number | null;
-  cog: number | null;
-  heading: number | null;
-  vesselType: number | null;
+// ---------------------------------------------------------------------------
+// VesselDetail (detail view — superset of fields beyond VesselSummary)
+// ---------------------------------------------------------------------------
 
-  navStatus: number | null;
-  rot: number | null;
-  callsign: string | null;
-  imo: number | null;
-  destination: string | null;
-  etaMonth: number | null;
-  etaDay: number | null;
-  etaHour: number | null;
-  etaMinute: number | null;
-  draught: number | null;
-  dimA: number | null;
-  dimB: number | null;
-  dimC: number | null;
-  dimD: number | null;
-  classB: boolean;
+export const vesselDetailSchema = z.object({
+  mmsi: z.string(),
+  name: z.string().nullable(),
+  location: geoPointSchema.optional(),
+  sog: z.number().nullable(),
+  cog: z.number().nullable(),
+  heading: z.number().nullable(),
+  vesselType: z.number().nullable(),
 
-  lastSeen: string; // ISO string after JSON parse
-  createdAt?: string;
-  updatedAt?: string;
-}
+  navStatus: z.number().nullable(),
+  rot: z.number().nullable(),
+  callsign: z.string().nullable(),
+  imo: z.number().nullable(),
+  destination: z.string().nullable(),
+  etaMonth: z.number().nullable(),
+  etaDay: z.number().nullable(),
+  etaHour: z.number().nullable(),
+  etaMinute: z.number().nullable(),
+  draught: z.number().nullable(),
+  dimA: z.number().nullable(),
+  dimB: z.number().nullable(),
+  dimC: z.number().nullable(),
+  dimD: z.number().nullable(),
+  classB: z.boolean(),
 
-export interface GetVesselDetailResponse {
-  status: "success";
-  data: { vessel: VesselDetail };
-}
+  lastSeen: z.string(),
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional(),
+});
 
-export interface BoundsOptions {
+export type VesselDetail = z.infer<typeof vesselDetailSchema>;
+
+export const getVesselDetailResponseSchema = z.object({
+  status: z.literal("success"),
+  data: z.object({ vessel: vesselDetailSchema }),
+});
+
+export type GetVesselDetailResponse = z.infer<
+  typeof getVesselDetailResponseSchema
+>;
+
+// ---------------------------------------------------------------------------
+// Bounds query (map viewport fetch)
+// ---------------------------------------------------------------------------
+
+export type BoundsOptions = {
   swLng: number;
   swLat: number;
   neLng: number;
   neLat: number;
-}
+};
 
-export interface GetVesselsInBoundsResponse {
-  status: "success";
-  results: number;
-  data: { vessels: VesselSummary[] };
-}
+export const getVesselsInBoundsResponseSchema = z.object({
+  status: z.literal("success"),
+  results: z.number(),
+  data: z.object({ vessels: z.array(vesselSummarySchema) }),
+});
 
-// ****** helpers ********
+export type GetVesselsInBoundsResponse = z.infer<
+  typeof getVesselsInBoundsResponseSchema
+>;
 
-/** Returns [lat, lon] for Leaflet, or null if vessel has no position */
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+/**
+ * Returns `[lat, lon]` for Leaflet (which expects lat first), or `null` if
+ * the vessel currently has no position. GeoJSON stores `[lon, lat]`; this
+ * is the one deliberate axis swap in the codebase and it happens in exactly
+ * one place so it can't be duplicated-and-forgotten elsewhere.
+ */
 export function getLatLon(vessel: VesselSummary): [number, number] | null {
   if (!vessel.location) return null;
   const [lon, lat] = vessel.location.coordinates;

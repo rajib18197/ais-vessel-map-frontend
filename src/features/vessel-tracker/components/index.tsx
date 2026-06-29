@@ -59,9 +59,10 @@ export default function VesselTracker() {
 const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 35rem 1fr;
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   overflow: hidden;
+  background: var(--color-bg);
 `;
 
 const CenteredMessage = styled.div`
@@ -70,19 +71,19 @@ const CenteredMessage = styled.div`
   justify-content: center;
   height: 100vh;
   width: 100vw;
-  background: #0e1117;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
   font-size: 1.4rem;
-  color: #4a6580;
   letter-spacing: 0.06em;
 `;
 
 const ErrorMessage = styled(CenteredMessage)`
   flex-direction: column;
   gap: 0.8rem;
-  color: #f87171;
+  color: var(--color-error);
 `;
 
 const ErrorDetail = styled.span`
   font-size: 1.1rem;
-  color: #4a6580;
+  color: var(--color-text-muted);
 `;

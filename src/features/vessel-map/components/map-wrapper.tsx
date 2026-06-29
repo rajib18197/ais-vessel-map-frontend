@@ -8,17 +8,17 @@ const spin = keyframes`
 export const MapWrapper = styled.div`
   height: 100vh;
   position: relative;
-  background-color: #f8f9fa;
+  background: var(--color-bg);
 
   .leaflet-tooltip {
-    background: rgba(14, 17, 23, 0.95);
+    background: rgba(15, 23, 42, 0.96);
     backdrop-filter: blur(8px);
-    border: 1px solid rgba(0, 180, 216, 0.4);
-    border-radius: 8px;
-    color: #e2e8f0;
+    border: 1px solid rgba(0, 180, 216, 0.35);
+    border-radius: var(--radius-sm);
+    color: var(--color-text);
     font-size: 0.95rem;
-    padding: 0.8rem 1.2rem;
-    box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.3);
+    padding: 0.9rem 1.2rem;
+    box-shadow: var(--shadow-md);
     white-space: nowrap;
     transition: opacity 0.2s ease-in-out;
   }
@@ -39,12 +39,12 @@ export const MapWrapper = styled.div`
 
   .leaflet-control-zoom a {
     background: rgba(255, 255, 255, 0.95) !important;
-    color: #1e293b !important;
+    color: var(--color-surface-muted) !important;
     transition: all 0.2s ease;
   }
 
   .leaflet-control-zoom a:hover {
-    background: #00b4d8 !important;
-    color: #fff !important;
+    background: var(--color-accent) !important;
+    color: var(--color-surface) !important;
   }
 `;

@@ -5,26 +5,24 @@ import { useNavigate } from "react-router-dom";
 import Button from "@/shared/ui/button";
 
 const StyledPageNotFound = styled.main`
-  height: 100vh;
-  background-color: var(--color-grey-50);
+  min-height: 100vh;
+  background-color: var(--color-bg);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 4.8rem;
+  padding: var(--space-xxl);
 `;
 
 const Box = styled.div`
-  /* box */
-  background-color: var(--color-grey-0);
-  border: 1px solid var(--color-grey-100);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--border-radius-md);
-
-  padding: 4.8rem;
+  padding: var(--space-xxl);
   flex: 0 1 96rem;
   text-align: center;
 
   & h1 {
-    margin-bottom: 3.2rem;
+    margin-bottom: var(--space-xl);
   }
 `;
 

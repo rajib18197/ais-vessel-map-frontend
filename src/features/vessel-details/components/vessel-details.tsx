@@ -124,35 +124,26 @@ export default function VesselDetails({ summary }: VesselDetailsProps) {
 
 const DetailSection = styled.div`
   flex: 1;
-  border-top: 1px solid #1c2d42;
+  border-top: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
-  --blue-darker: hsl(230deg 40% 24%);
-  --blue-dark: hsl(230deg 40% 28%);
   background:
     linear-gradient(
-      calc(180deg - 20deg),
+      180deg,
       transparent 0%,
-      transparent 49.99%,
-      var(--blue-dark) 50%,
-      var(--blue-dark) 100%
+      rgba(15, 23, 42, 0.25) 40%,
+      rgba(12, 20, 34, 0.9) 100%
     ),
-    linear-gradient(
-      calc(180deg + 20deg),
-      transparent 0%,
-      transparent 49.99%,
-      var(--blue-darker) 50%,
-      var(--blue-darker) 100%
-    );
-  padding-bottom: 1.4rem;
+    var(--color-surface);
+  padding-bottom: var(--space-lg);
 `;
 
 const DetailVesselName = styled.div`
-  padding: 0.9rem 2.8rem 0.6rem;
+  padding: var(--space-sm) var(--space-lg) 0.6rem;
   font-size: 1.7rem;
-  color: #00b4d8;
+  color: var(--color-accent);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -163,14 +154,13 @@ const DetailVesselName = styled.div`
 
 const DetailGrid = styled.dl`
   display: grid;
-  width: 80%;
+  width: min(100%, 80rem);
   grid-template-columns: 9rem 1fr;
   row-gap: 0;
   overflow-y: auto;
   flex: 1;
-  padding: 0.8rem 2.8rem 1.6rem;
-  margin-left: auto;
-  margin-right: auto;
+  padding: 0.8rem var(--space-lg) 1.6rem;
+  margin: 0 auto;
 
   &::-webkit-scrollbar {
     width: 0;
@@ -179,7 +169,7 @@ const DetailGrid = styled.dl`
 
 const Dt = styled.dt`
   font-size: 1.1rem;
-  color: hsl(210deg, 14%, 66%);
+  color: var(--color-text-muted);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -190,7 +180,7 @@ const Dt = styled.dt`
 
 const Dd = styled.dd`
   font-size: 1.25rem;
-  color: #e2e8f0;
+  color: var(--color-text);
   padding: 0.55rem 0 0.55rem 1.2rem;
   display: flex;
   align-items: center;
@@ -205,15 +195,15 @@ const SectionDivider = styled.div`
   font-size: 0.95rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #4a6580;
-  border-top: 1px solid #1c2d42;
+  color: var(--color-text-muted);
+  border-top: 1px solid var(--color-border);
 `;
 
 const LoadingRow = styled.div`
   grid-column: 1 / -1;
   padding: 0.8rem 0;
   font-size: 1.1rem;
-  color: #4a6580;
+  color: var(--color-text-muted);
   font-style: italic;
 `;
 
@@ -221,7 +211,7 @@ const ErrorRow = styled.div`
   grid-column: 1 / -1;
   padding: 0.8rem 0;
   font-size: 1.1rem;
-  color: #f87171;
+  color: var(--color-error);
 `;
 
 const EmptyNotice = styled.p`
@@ -230,8 +220,8 @@ const EmptyNotice = styled.p`
   padding: 0.6rem 0.8rem;
   font-size: 1rem;
   line-height: 1.5;
-  color: #94a3b8;
+  color: var(--color-text-muted);
   background: rgba(148, 163, 184, 0.08);
-  border-left: 2px solid #4a6580;
-  border-radius: 2px;
+  border-left: 2px solid var(--color-text-muted);
+  border-radius: var(--radius-tiny);
 `;

@@ -2,48 +2,49 @@ import { createGlobalStyle } from "styled-components";
 
 const GlobalStyles = createGlobalStyle`
 :root {
-    &, &.light-mode {
-    /* Grey */
-    --color-grey-0: #fff;
-    --color-grey-50: #f9fafb;
-    --color-grey-100: #f3f4f6;
-    --color-grey-200: #e5e7eb;
-    --color-grey-300: #d1d5db;
-    --color-grey-400: #9ca3af;
-    --color-grey-500: #6b7280;
-    --color-grey-600: #4b5563;
-    --color-grey-700: #374151;
-    --color-grey-800: #1f2937;
-    --color-grey-900: #111827;
-  
-    --color-blue-100: #e0f2fe;
-    --color-blue-700: #0369a1;
-    --color-green-100: #dcfce7;
-    --color-green-700: #15803d;
-    --color-yellow-100: #fef9c3;
-    --color-yellow-700: #a16207;
-    --color-silver-100: #e5e7eb;
-    --color-silver-700: #374151;
-    --color-indigo-100: #e0e7ff;
-    --color-indigo-700: #4338ca;
-  
-    --color-red-100: #fee2e2;
-    --color-red-700: #b91c1c;
-    --color-red-800: #991b1b;
-  
-    --backdrop-color: rgba(255, 255, 255, 0.1);
-  
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
-    --shadow-md: 0px 0.6rem 2.4rem rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 2.4rem 3.2rem rgba(0, 0, 0, 0.12);
-    
-  
-      --image-grayscale: 0;
-    --image-opacity: 100%;
-    }
-    
-    &.dark-mode {
-      --color-grey-0: #18212f;
+  --font-family-body: "Josefin Sans", sans-serif;
+  --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  --space-xxs: 0.4rem;
+  --space-xs: 0.8rem;
+  --space-sm: 1.2rem;
+  --space-md: 1.6rem;
+  --space-lg: 2.4rem;
+  --space-xl: 3.2rem;
+  --space-xxl: 4.8rem;
+
+  --radius-tiny: 3px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.16);
+  --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.18);
+  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.22);
+
+  --transition-fast: 180ms ease;
+  --transition-slow: 300ms ease;
+
+  --color-bg: #08131f;
+  --color-surface: #0f1b2c;
+  --color-surface-strong: #121e33;
+  --color-surface-muted: #111827;
+  --color-text: #e9eff7;
+  --color-text-muted: #94a3b8;
+  --color-text-subtle: #cbd5e1;
+  --color-border: rgba(148, 163, 184, 0.18);
+  --color-border-strong: rgba(148, 163, 184, 0.28);
+  --color-accent: #00b4d8;
+  --color-accent-soft: rgba(0, 180, 216, 0.12);
+  --color-accent-strong: #22c4ec;
+  --color-accent-hover: #0ea1c7;
+  --color-error: #f87171;
+  --color-error-soft: rgba(248, 113, 113, 0.15);
+  --color-warning: #f59e0b;
+  --color-success: #22c55e;
+
+  --color-grey-0: #18212f;
   --color-grey-50: #111827;
   --color-grey-100: #1f2937;
   --color-grey-200: #374151;
@@ -54,172 +55,144 @@ const GlobalStyles = createGlobalStyle`
   --color-grey-700: #e5e7eb;
   --color-grey-800: #f3f4f6;
   --color-grey-900: #f9fafb;
-  
-  --color-blue-100: #075985;
-  --color-blue-700: #e0f2fe;
-  --color-green-100: #166534;
-  --color-green-700: #dcfce7;
-  --color-yellow-100: #854d0e;
-  --color-yellow-700: #fef9c3;
-  --color-silver-100: #374151;
-  --color-silver-700: #f3f4f6;
-  --color-indigo-100: #3730a3;
-  --color-indigo-700: #e0e7ff;
-  
+
   --color-red-100: #fee2e2;
   --color-red-700: #b91c1c;
   --color-red-800: #991b1b;
-  
-  --backdrop-color: rgba(0, 0, 0, 0.3);
-  
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0px 0.6rem 2.4rem rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 2.4rem 3.2rem rgba(0, 0, 0, 0.4);
-  
-  --image-grayscale: 10%;
-  --image-opacity: 90%;
-    }
-    
-    /* Indigo */
-    --color-brand-50: #eef2ff;
-    --color-brand-100: #e0e7ff;
-    --color-brand-200: #c7d2fe;
-    --color-brand-500: #6366f1;
-    --color-brand-600: #4f46e5;
-    --color-brand-700: #4338ca;
-    --color-brand-800: #3730a3;
-    --color-brand-900: #312e81;
-    
-    --border-radius-tiny: 3px;
-    --border-radius-sm: 5px;
-    --border-radius-md: 7px;
-    --border-radius-lg: 9px;
-  
-  
-  }
-  
-  *,
-  *::before,
-  *::after {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-  
-    /* Creating animations for dark mode */
-    transition: background-color 0.3s, border 0.3s;
-  }
-  
-  html {
-    font-size: 62.5%;
 
-    @media (max-width: 78em){
-      font-size: 56%;
-    }
+  --color-brand-50: #dbf5ff;
+  --color-brand-100: #baf0ff;
+  --color-brand-200: #84dcff;
+  --color-brand-500: #00b4d8;
+  --color-brand-600: #00a1c2;
+  --color-brand-700: #0086a1;
+  --color-brand-800: #0f5780;
+  --color-brand-900: #10455f;
 
-    @media (max-width: 59em){
-      font-size: 50%;
-    }
-  }
-  
-  body {
-     font-family: "Josefin Sans", sans-serif;
-
-    font-weight: 400;
-    color: var(--color-grey-100);
-    background-color: var(--color-grey-800);
-    background-image: linear-gradient(to right, #ff4f8b, #956dca);
-    /* background-color: #6A5ACD; */
-  
-  
-    transition: color 0.3s, background-color 0.3s;
-    height: 100vh;
-    
-    line-height: 1.5;
-    font-size: 1.6rem;
-    /* overflow: hidden; */
-
-    @media (max-width: 59em) {
-      height: auto;
-    }
-  }
-  
-  input,
-  button,
-  textarea,
-  select {
-    font: inherit;
-    color: inherit;
-  }
-  
-  button {
-    cursor: pointer;
-  }
-  
-  *:disabled {
-    cursor: not-allowed;
-  }
-  
-  select:disabled,
-  input:disabled {
-    background-color: var(--color-grey-200);
-    color: var(--color-grey-500);
-  }
-  
-  input:focus,
-  button:focus,
-  textarea:focus,
-  select:focus {
-    outline: 2px solid var(--color-brand-600);
-    outline-offset: -1px;
-  }
-  
-  /* Parent selector, finally 😃 */
-  button:has(svg) {
-    line-height: 0;
-  }
-  
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
-  
-  ul {
-    list-style: none;
-  }
-  
-  p,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    overflow-wrap: break-word;
-    hyphens: auto;
-  }
-
-  h1, h2, p {
-    text-rendering: optimizelegibility;
+  --backdrop-color: rgba(0, 0, 0, 0.28);
+  --image-grayscale: 0;
+  --image-opacity: 1;
 }
-  
-  img {
-    /* max-width: 100%; */
-  
-    /* For dark mode */
-    filter: grayscale(var(--image-grayscale)) opacity(var(--image-opacity));
+
+:root.light-mode {
+  --color-bg: #f8fafc;
+  --color-surface: #ffffff;
+  --color-surface-strong: #f3f4f6;
+  --color-surface-muted: #e5e7eb;
+  --color-text: #0f172a;
+  --color-text-muted: #475569;
+  --color-text-subtle: #64748b;
+  --color-border: rgba(148, 163, 184, 0.23);
+  --color-border-strong: rgba(100, 116, 139, 0.24);
+  --backdrop-color: rgba(255, 255, 255, 0.7);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  transition: background-color var(--transition-slow), color var(--transition-slow), border-color var(--transition-slow);
+}
+
+html {
+  font-size: 62.5%;
+
+  @media (max-width: 78em) {
+    font-size: 56%;
   }
 
-  /* Leaflet CSS resets that affect our layout */
-  .leaflet-container {
-    height: 100%;
-    width: 100%;
-    background: #0a1628;
+  @media (max-width: 59em) {
+    font-size: 50%;
   }
- 
-  /* Smooth marker transitions — vessels glide to new positions */
-  .leaflet-marker-icon {
-    transition: transform 0.4s ease;
-  }
+}
+
+body {
+  min-height: 100vh;
+  font-family: var(--font-family-body);
+  font-weight: 400;
+  color: var(--color-text);
+  background: radial-gradient(circle at top left, rgba(0, 180, 216, 0.14), transparent 22%), radial-gradient(circle at bottom right, rgba(99, 176, 255, 0.08), transparent 24%), var(--color-bg);
+  transition: color var(--transition-slow), background-color var(--transition-slow);
+  line-height: 1.5;
+  font-size: 1.6rem;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+*:disabled {
+  cursor: not-allowed;
+}
+
+select:disabled,
+input:disabled {
+  background-color: var(--color-surface-muted);
+  color: var(--color-text-muted);
+}
+
+input:focus,
+button:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid var(--color-brand-600);
+  outline-offset: 2px;
+}
+
+button:has(svg) {
+  line-height: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+h1,
+h2,
+p {
+  text-rendering: optimizeLegibility;
+}
+
+img {
+  filter: grayscale(var(--image-grayscale)) opacity(var(--image-opacity));
+  max-width: 100%;
+}
+
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  background: var(--color-bg);
+}
+
+.leaflet-marker-icon {
+  transition: transform 0.4s ease;
+}
 `;
 
 export default GlobalStyles;

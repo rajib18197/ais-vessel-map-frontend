@@ -32,14 +32,11 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
-  background-color: #0e1117;
-  color: #e2e8f0;
-  font-family:
-    system-ui,
-    -apple-system,
-    sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-family-body);
 `;
 
 const ContentBox = styled.div`
@@ -47,54 +44,51 @@ const ContentBox = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  width: 48rem;
-  padding: 3rem;
-  background: rgba(30, 41, 59, 0.4);
-  border: 1px solid rgba(74, 101, 128, 0.2);
-  border-radius: 1rem;
-  box-shadow:
-    0 20px 25px -5px rgba(0, 0, 0, 0.5),
-    0 8px 10px -6px rgba(0, 0, 0, 0.5);
+  width: min(100%, 48rem);
+  padding: var(--space-xl);
+  background: rgba(16, 25, 40, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
 `;
 
 const IconWrapper = styled.div`
   font-size: 3rem;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-sm);
 `;
 
 const Title = styled.h1`
   font-size: 1.7rem;
   font-weight: 600;
-  margin: 0 0 0.5rem 0;
-  color: #f87171;
+  margin: 0 0 0.6rem 0;
+  color: var(--color-error);
 `;
 
 const Description = styled.p`
   font-size: 1.3rem;
-  color: #94a3b8;
-  margin: 0 0 1.5rem 0;
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-lg) 0;
   line-height: 1.5;
   font-style: italic;
 `;
 
 const ErrorCard = styled.div`
-  background: rgba(15, 23, 42, 0.6);
+  background: rgba(12, 20, 34, 0.85);
   padding: 1rem;
-
-  border-radius: 0.1rem;
+  border-radius: var(--radius-sm);
   width: 100%;
-  margin-bottom: 2rem;
-  border-left: 4px solid #f87171;
+  margin-bottom: var(--space-lg);
+  border-left: 4px solid var(--color-error);
   text-align: left;
 `;
 
 const ErrorText = styled.code`
   font-size: 1.1rem;
-  color: #cbd5e1;
+  color: var(--color-text-subtle);
   word-break: break-word;
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
-  gap: 1rem;
+  gap: var(--space-sm);
 `;

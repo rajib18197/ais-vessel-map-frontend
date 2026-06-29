@@ -36,23 +36,25 @@ function TooltipRow({ label, value, withBorder = true }: TooltipRowProps) {
         justifyContent: "space-between",
         gap: "2rem",
         ...(withBorder && {
-          borderBottom: "1px solid #334155",
+          borderBottom: "1px solid rgba(148, 163, 184, 0.18)",
           paddingBottom: "4px",
         }),
       }}
     >
-      <span style={{ color: "#94a3b8" }}>{label}</span>
-      <span style={{ color: "#f8fafc", fontWeight: 500 }}>{value}</span>
+      <span style={{ color: "var(--color-text-muted)" }}>{label}</span>
+      <span style={{ color: "var(--color-text)", fontWeight: 500 }}>
+        {value}
+      </span>
     </div>
   );
 }
 
 export function VesselTooltip({ vessel }: VesselTooltipProps) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
       <span
         style={{
-          color: "#ec4899",
+          color: "var(--color-accent)",
           fontWeight: 700,
           fontSize: "1.1rem",
           textTransform: "uppercase",

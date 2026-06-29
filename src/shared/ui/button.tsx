@@ -3,19 +3,19 @@ import styled, { css } from "styled-components";
 const sizes = {
   small: css`
     font-size: 1.2rem;
-    padding: 0.4rem 0.8rem;
+    padding: var(--space-xs) var(--space-sm);
     text-transform: uppercase;
     font-weight: 600;
     text-align: center;
   `,
   medium: css`
     font-size: 1.4rem;
-    padding: 1.2rem 1.6rem;
+    padding: var(--space-sm) var(--space-md);
     font-weight: 500;
   `,
   large: css`
     font-size: 1.6rem;
-    padding: 1.2rem 2.4rem;
+    padding: var(--space-sm) var(--space-lg);
     font-weight: 500;
   `,
 } as const;
@@ -24,18 +24,19 @@ const variations = {
   primary: css`
     color: var(--color-brand-50);
     background-color: var(--color-brand-600);
+    border: 1px solid transparent;
 
     &:hover {
       background-color: var(--color-brand-700);
     }
   `,
   secondary: css`
-    color: var(--color-grey-600);
-    background: var(--color-grey-0);
-    border: 1px solid var(--color-grey-200);
+    color: var(--color-text-muted);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
 
     &:hover {
-      background-color: var(--color-grey-50);
+      background-color: var(--color-surface-strong);
     }
   `,
   danger: css`
@@ -61,11 +62,27 @@ const Button = styled.button.attrs<ButtonProps>(() => ({
   size: "medium",
 }))<ButtonProps>`
   border: none;
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
   box-shadow: var(--shadow-sm);
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
   ${({ size = "medium" }) => sizes[size]}
   ${({ variation = "primary" }) => variations[variation]}
+
+  &:focus-visible {
+    outline: 3px solid var(--color-brand-600);
+    outline-offset: 3px;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
 `;
 
 export default Button;

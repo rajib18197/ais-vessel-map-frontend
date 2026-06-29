@@ -11,8 +11,9 @@ export default function Sidebar({ children }: SidebarProps) {
 
 const Wrapper = styled.aside`
   height: 100vh;
-  background: hsl(210deg 19% 9%/1);
+  background: var(--color-surface-strong);
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 `;

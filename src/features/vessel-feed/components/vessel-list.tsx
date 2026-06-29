@@ -46,13 +46,13 @@ const Wrapper = styled.div<{ $hasDetail: boolean }>`
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
-  background: hsl(210deg 19% 9%/1);
+  background: var(--color-surface);
 `;
 
 const SectionLabel = styled.div`
-  padding: 1.2rem 2.8rem 0.8rem;
+  padding: var(--space-sm) var(--space-lg) 0.8rem;
   font-size: 1.05rem;
-  color: #4a6580;
+  color: var(--color-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.14em;
   flex-shrink: 0;
@@ -60,11 +60,10 @@ const SectionLabel = styled.div`
 
 const ListWrapper = styled.ul`
   list-style: none;
-  overflow-y: scroll;
+  overflow-y: auto;
   flex: 1;
-  padding: 0 0 1rem;
+  padding: 0 0 var(--space-sm);
 
-  /* Thin scrollbar — matches Mapty pattern */
   &::-webkit-scrollbar {
     width: 0;
   }
@@ -72,7 +71,7 @@ const ListWrapper = styled.ul`
 
 const EmptyMessage = styled.p`
   font-size: 1.2rem;
-  color: #4a6580;
-  padding: 2.4rem 2.8rem;
+  color: var(--color-text-muted);
+  padding: var(--space-lg) var(--space-lg);
   line-height: 1.6;
 `;

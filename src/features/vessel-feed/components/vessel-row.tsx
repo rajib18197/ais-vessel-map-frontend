@@ -34,7 +34,7 @@ export default function VesselRow({
 }
 
 const radarReturn = keyframes`
-  0%   { border-left-color: #00b4d8; background: rgba(0, 180, 216, 0.12); }
+  0%   { border-left-color: var(--color-accent); background: var(--color-accent-soft); }
   100% { border-left-color: transparent; background: transparent; }
 `;
 
@@ -42,20 +42,18 @@ const Wrapper = styled.li<{
   $isSelected: boolean;
   $isUpdated: boolean;
 }>`
-  padding: 1.2rem 2.8rem;
+  padding: var(--space-sm) var(--space-lg);
   cursor: pointer;
   border-left: 3px solid transparent;
-  transition: background 0.15s;
+  transition: background var(--transition-fast);
 
-  /* Selected state */
   ${(p) =>
     p.$isSelected &&
     css`
-      border-left-color: #00b4d8;
-      background: rgba(0, 180, 216, 0.07);
+      border-left-color: var(--color-accent);
+      background: rgba(0, 180, 216, 0.08);
     `}
 
-  /* Radar return pulse on live update */
   ${(p) =>
     p.$isUpdated &&
     !p.$isSelected &&
@@ -64,14 +62,14 @@ const Wrapper = styled.li<{
     `}
 
   &:hover {
-    background: rgba(0, 180, 216, 0.05);
+    background: rgba(0, 180, 216, 0.06);
   }
 `;
 
 const VesselName = styled.p`
   font-size: 1.35rem;
-  font-weight: 400;
-  color: hsl(259deg 100% 71%/1);
+  font-weight: 500;
+  color: var(--color-text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -79,9 +77,9 @@ const VesselName = styled.p`
 `;
 
 const VesselMeta = styled.p`
-  font-size: 1.15rem;
-  color: hsl(210deg 10% 90%/1);
-  margin-top: 0.2rem;
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  margin-top: 0.3rem;
   display: flex;
   gap: 1.2rem;
 `;

@@ -133,9 +133,7 @@ const GlobalStyles = createGlobalStyle`
   
     transition: color 0.3s, background-color 0.3s;
     height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    
     line-height: 1.5;
     font-size: 1.6rem;
     /* overflow: hidden; */

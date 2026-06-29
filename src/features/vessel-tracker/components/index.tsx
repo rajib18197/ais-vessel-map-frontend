@@ -71,7 +71,6 @@ const CenteredMessage = styled.div`
   height: 100vh;
   width: 100vw;
   background: #0e1117;
-  font-family: "Share Tech Mono", "JetBrains Mono", monospace;
   font-size: 1.4rem;
   color: #4a6580;
   letter-spacing: 0.06em;

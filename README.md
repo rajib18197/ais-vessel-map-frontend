@@ -151,9 +151,7 @@ All Zod schemas and their inferred TypeScript types live in `vessel.types.ts` �
 
 All fetch functions throw `ApiError`, a typed error class with a `status` field. This makes `useQuery<T, ApiError>` an honest contract — consumers can safely narrow on `error.isNotFound`, `error.isNetworkFailure`, or `error.isServerError` without `instanceof` checks. Three failure cases are distinguished: network failure before the server was reached (status `0`), HTTP error responses, and malformed response bodies.
 
-### Component design — Consumer Experience vs. Producer Experience
-
-## Consumer Experience vs. Producer Experience
+### Consumer Experience vs. Producer Experience
 
 In a longer-lived application, the stuff that often makes the difference between a React application that feels maintainable vs. one that doesn't is this idea:
 
@@ -161,7 +159,7 @@ In a longer-lived application, the stuff that often makes the difference between
 
 When I was introduced with this idea first time, I continuously getting a feel for it. Take a look at this screenshot. It is from the book called _Operating System: Three Easy Pieces_:
 
-![Operating System: Three Easy Pieces](image.png)
+![Abstraction of the OS: Process](image.png)
 
 Operating System Codebase is a closed system. From a consumer point of view, none of it directly accessible. Instead, consumers interface with the OS through system calls (APIs) just like the paragraph emphasize.
 

@@ -1,5 +1,6 @@
 import type { VesselSummary } from "@/entities/vessel/types/vessel.types";
 import { VESSEL_TYPE_LABELS } from "../constants/vessel-theme";
+import { fmtCoord } from "@/entities/vessel/utils/helpers";
 
 interface VesselTooltipProps {
   vessel: VesselSummary;
@@ -50,6 +51,9 @@ function TooltipRow({ label, value, withBorder = true }: TooltipRowProps) {
 }
 
 export function VesselTooltip({ vessel }: VesselTooltipProps) {
+  const lat = vessel.location?.coordinates[1];
+  const lon = vessel.location?.coordinates[0];
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
       <span
@@ -66,6 +70,8 @@ export function VesselTooltip({ vessel }: VesselTooltipProps) {
       <TooltipRow label="MMSI" value={vessel.mmsi} />
       <TooltipRow label="TYPE" value={resolveTypeName(vessel.vesselType)} />
       <TooltipRow label="SPEED" value={formatSpeed(vessel.sog)} />
+      <TooltipRow label="LAT" value={fmtCoord(lat)} />
+      <TooltipRow label="LON" value={fmtCoord(lon)} />
       <TooltipRow
         label="UPDATED"
         value={formatLastSeen(vessel.lastSeen)}

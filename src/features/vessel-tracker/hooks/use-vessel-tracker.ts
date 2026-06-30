@@ -45,6 +45,19 @@ export function useVesselTracker(): UseVesselTrackerResult {
     bounds,
   });
 
+  /*
+    I structured this way simply because it has to do with one of the most important mental models I've learned, when it comes to working with React: the principle of least privilege.
+
+    When we give the consumer a state-setter function, we grant it so much more power than that. For example, it can erase all of the current items:
+
+    By sharing `onVesselSelect` instead of `setSelectedMmsi` we expose less power to the consumer. We're in total control of the state transition. 
+    
+    I think this will truely shine on scale. what if we were working on a codebase with hundreds of thousands of lines of code? If we were 1 of 50 developers on the project? 
+  */
+  const onVesselSelect = useCallback((mmsi: string | null) => {
+    setSelectedMmsi(mmsi);
+  }, []);
+
   const onBoundsChange = useCallback(
     (next: BoundsOptions) => {
       if (isBoundsMode) setBounds(next);
@@ -61,7 +74,7 @@ export function useVesselTracker(): UseVesselTrackerResult {
     isError,
     errorMessage: error?.message ?? null,
     isBoundsMode,
-    onVesselSelect: setSelectedMmsi,
+    onVesselSelect: onVesselSelect,
     onBoundsChange: onBoundsChange,
   };
 }

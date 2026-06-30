@@ -1,6 +1,5 @@
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, Marker, Tooltip } from "react-leaflet";
-import type { LatLngTuple } from "leaflet";
 import type {
   VesselSummary,
   BoundsOptions,
@@ -11,13 +10,13 @@ import { MapAutoPan } from "./map-auto-pan";
 import { VesselTooltip } from "./vessel-tooltip";
 import { createVesselIcon } from "./vessel-icon";
 import { MapBoundsTracker } from "./map-bounds-tracker";
-
-const MAP_CENTER = [32.72, -117.23] as LatLngTuple;
-const MAP_DEFAULT_ZOOM = 11 as const;
-const TILE_LAYER_URL =
-  "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png" as const;
-const TILE_LAYER_ATTRIBUTION =
-  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' as const;
+import {
+  FALLBACK_CENTER,
+  FALLBACK_ZOOM,
+  TILE_LAYER_ATTRIBUTION,
+  TILE_LAYER_URL,
+} from "../constants/vessel-theme";
+import { MapInitialView } from "./map-initial-view";
 
 type MapCanvasProps = {
   readonly vessels: VesselSummary[];
@@ -35,8 +34,8 @@ export default function MapCanvas({
   return (
     <MapWrapper>
       <MapContainer
-        center={MAP_CENTER}
-        zoom={MAP_DEFAULT_ZOOM}
+        center={FALLBACK_CENTER}
+        zoom={FALLBACK_ZOOM}
         scrollWheelZoom
         style={{ height: "100%", width: "100%", zIndex: 0 }}
       >
@@ -67,6 +66,7 @@ export default function MapCanvas({
           );
         })}
 
+        <MapInitialView vessels={vessels} />
         <MapAutoPan selectedMmsi={selectedMmsi} vessels={vessels} />
         {onBoundsChange && <MapBoundsTracker onBoundsChange={onBoundsChange} />}
       </MapContainer>

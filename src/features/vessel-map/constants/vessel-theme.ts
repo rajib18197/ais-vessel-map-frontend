@@ -15,6 +15,16 @@ type VesselCategory =
   | "sailing"
   | "unknown";
 
+export const FALLBACK_CENTER: [number, number] = [32.72, -117.23];
+export const FALLBACK_ZOOM = 11;
+export const FIT_BOUNDS_PADDING: [number, number] = [50, 50];
+
+export const TILE_LAYER_URL =
+  "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png" as const;
+
+export const TILE_LAYER_ATTRIBUTION =
+  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' as const;
+
 export const VESSEL_TYPE_RANGES: ReadonlyArray<{
   readonly min: number;
   readonly max: number;

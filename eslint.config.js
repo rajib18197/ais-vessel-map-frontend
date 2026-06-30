@@ -35,16 +35,33 @@ export default defineConfig([
       ],
     },
     rules: {
-      "boundaries/element-types": [
+      "boundaries/dependencies": [
         "error",
         {
           default: "disallow",
           rules: [
-            { from: "app", allow: ["pages", "features", "entities", "shared"] },
-            { from: "pages", allow: ["features", "entities", "shared"] },
-            { from: "features", allow: ["entities", "shared"] },
-            { from: "entities", allow: ["shared"] },
-            { from: "shared", allow: [] },
+            {
+              from: { type: "app" },
+              allow: {
+                to: { type: ["pages", "features", "entities", "shared"] },
+              },
+            },
+            {
+              from: { type: "pages" },
+              allow: { to: { type: ["features", "entities", "shared"] } },
+            },
+            {
+              from: { type: "features" },
+              allow: { to: { type: ["entities", "shared"] } },
+            },
+            {
+              from: { type: "entities" },
+              allow: { to: { type: "shared" } },
+            },
+            {
+              from: { type: "shared" },
+              disallow: { to: { type: "*" } },
+            },
           ],
         },
       ],

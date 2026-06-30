@@ -37,3 +37,20 @@ export function fmtTime(iso: string): string {
 export function fmtSog(sog: number | null | undefined): string {
   return fmt(sog, 1, "kn");
 }
+
+export function formatSpeed(sog: number | null | undefined): string {
+  return sog != null ? `${sog.toFixed(1)} kn` : "—";
+}
+
+export function formatLastSeen(lastSeen: string): string {
+  return new Date(lastSeen).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+}
+
+export function resolveTypeName(vesselType: number | null | undefined): string {
+  if (vesselType == null) return "Unknown";
+  return VESSEL_TYPE_LABELS[vesselType] ?? `Type ${vesselType}`;
+}

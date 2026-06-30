@@ -16,7 +16,7 @@ import {
   TILE_LAYER_ATTRIBUTION,
   TILE_LAYER_URL,
 } from "../constants/vessel-theme";
-import { MapInitialView } from "./map-initial-view";
+// import { MapInitialView } from "./map-initial-view";
 
 type MapCanvasProps = {
   readonly vessels: VesselSummary[];
@@ -66,7 +66,7 @@ export default function MapCanvas({
           );
         })}
 
-        <MapInitialView vessels={vessels} />
+        {/* <MapInitialView vessels={vessels} /> */}
         <MapAutoPan selectedMmsi={selectedMmsi} vessels={vessels} />
         {onBoundsChange && <MapBoundsTracker onBoundsChange={onBoundsChange} />}
       </MapContainer>

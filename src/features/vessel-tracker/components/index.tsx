@@ -116,7 +116,6 @@ const MapPlaceholder = styled.div`
   align-items: center;
   justify-content: center;
   color: #4a6580;
-  font-family: "Share Tech Mono", "JetBrains Mono", monospace;
   font-size: 1.2rem;
   letter-spacing: 0.06em;
 `;

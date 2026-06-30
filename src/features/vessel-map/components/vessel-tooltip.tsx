@@ -1,58 +1,64 @@
 import type { VesselSummary } from "@/entities/vessel/types/vessel.types";
-import { VESSEL_TYPE_LABELS } from "../constants/vessel-theme";
-import { fmtCoord } from "@/entities/vessel/utils/helpers";
+import {
+  fmtCoord,
+  formatLastSeen,
+  formatSpeed,
+  resolveTypeName,
+} from "@/entities/vessel/utils/helpers";
+import TooltipRow from "./tooltip-row";
 
-interface VesselTooltipProps {
+type TooltipField = {
+  readonly id: string;
+  readonly label: string;
+  readonly format: (vessel: VesselSummary) => string | null;
+};
+
+const TOOLTIP_FIELDS = [
+  {
+    id: "mmsi",
+    label: "MMSI",
+    format: (v) => v.mmsi,
+  },
+  {
+    id: "type",
+    label: "TYPE",
+    format: (v) => resolveTypeName(v.vesselType),
+  },
+  {
+    id: "speed",
+    label: "SPEED",
+    format: (v) => formatSpeed(v.sog),
+  },
+  {
+    id: "lat",
+    label: "LAT",
+    format: (v) => (v.location ? fmtCoord(v.location.coordinates[1]) : null),
+  },
+  {
+    id: "lon",
+    label: "LON",
+    format: (v) => (v.location ? fmtCoord(v.location.coordinates[0]) : null),
+  },
+  {
+    id: "updated",
+    label: "UPDATED",
+    format: (v) => formatLastSeen(v.lastSeen),
+  },
+] satisfies readonly TooltipField[];
+
+type VesselTooltipProps = {
   vessel: VesselSummary;
-}
-
-function formatSpeed(sog: number | null | undefined): string {
-  return sog != null ? `${sog.toFixed(1)} kn` : "—";
-}
-
-function formatLastSeen(lastSeen: string): string {
-  return new Date(lastSeen).toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  });
-}
-
-function resolveTypeName(vesselType: number | null | undefined): string {
-  if (vesselType == null) return "Unknown";
-  return VESSEL_TYPE_LABELS[vesselType] ?? `Type ${vesselType}`;
-}
-
-interface TooltipRowProps {
-  label: string;
-  value: string;
-  withBorder?: boolean;
-}
-
-function TooltipRow({ label, value, withBorder = true }: TooltipRowProps) {
-  return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        gap: "2rem",
-        ...(withBorder && {
-          borderBottom: "1px solid rgba(148, 163, 184, 0.18)",
-          paddingBottom: "4px",
-        }),
-      }}
-    >
-      <span style={{ color: "var(--color-text-muted)" }}>{label}</span>
-      <span style={{ color: "var(--color-text)", fontWeight: 500 }}>
-        {value}
-      </span>
-    </div>
-  );
-}
+};
 
 export function VesselTooltip({ vessel }: VesselTooltipProps) {
-  const lat = vessel.location?.coordinates[1];
-  const lon = vessel.location?.coordinates[0];
+  const rows = TOOLTIP_FIELDS.map((field) => ({
+    id: field.id,
+    label: field.label,
+    value: field.format(vessel),
+  })).filter(
+    (row): row is { id: string; label: string; value: string } =>
+      row.value !== null,
+  );
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
@@ -67,16 +73,14 @@ export function VesselTooltip({ vessel }: VesselTooltipProps) {
         {vessel.name || "UNKNOWN VESSEL"}
       </span>
 
-      <TooltipRow label="MMSI" value={vessel.mmsi} />
-      <TooltipRow label="TYPE" value={resolveTypeName(vessel.vesselType)} />
-      <TooltipRow label="SPEED" value={formatSpeed(vessel.sog)} />
-      <TooltipRow label="LAT" value={fmtCoord(lat)} />
-      <TooltipRow label="LON" value={fmtCoord(lon)} />
-      <TooltipRow
-        label="UPDATED"
-        value={formatLastSeen(vessel.lastSeen)}
-        withBorder={false}
-      />
+      {rows.map((row, i) => (
+        <TooltipRow
+          key={row.id}
+          label={row.label}
+          value={row.value}
+          withBorder={i !== rows.length - 1}
+        />
+      ))}
     </div>
   );
 }

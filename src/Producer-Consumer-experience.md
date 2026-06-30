@@ -6,7 +6,7 @@ In a longer-lived application, the stuff that often makes the difference between
 
 When I was introduced with this idea first time, I continuously getting a feel for it. Take a look at this screenshot. It is from the book called _Operating System: Three Easy Pieces_:
 
-![Abstraction of the OS: Process](image.png)
+![Abstraction of the OS: Process](/public/process.png)
 
 Operating System Codebase is a closed system. From a consumer point of view, none of it directly accessible. Instead, consumers interface with the OS through system calls (APIs) just like the paragraph emphasize.
 

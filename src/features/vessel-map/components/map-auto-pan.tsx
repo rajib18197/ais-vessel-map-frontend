@@ -7,11 +7,7 @@ type MapAutoPanProps = {
   vessels: VesselSummary[];
 };
 
-/**
- * No visual output. Exists only so the auto-pan effect runs inside
- * MapContainer's Leaflet context — useMap() is unavailable outside it,
- * so this can't be hoisted into MapCanvas's own render body.
- */
+// Runs auto-pan logic inside Leaflet's map context.
 export function MapAutoPan({ selectedMmsi, vessels }: MapAutoPanProps) {
   const map = useMap();
   useMapAutoPan(map, selectedMmsi, vessels);

@@ -32,6 +32,8 @@ export function useMapBoundsTracker(
   useMapEvents({
     moveend: () => {
       if (timerRef.current) clearTimeout(timerRef.current);
+
+      // Debouncing: Wait until the user stops moving the map before updating the bounds.
       timerRef.current = setTimeout(() => {
         onBoundsChange(leafletBoundsToOptions(map));
       }, BOUNDS_CHANGE_DEBOUNCE_MS);

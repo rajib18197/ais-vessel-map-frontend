@@ -1,7 +1,7 @@
 import GlobalStyles from "@/styles/global-styles";
 import { BrowserRouter, Route } from "react-router-dom";
 import { Routes } from "react-router-dom";
-import VesselTrackerPage from "@/pages/vessel-tracker/page";
+import VesselTrackerPage from "@/pages/vessel-tracker";
 import QueryProvider from "./providers/query-client";
 import PageNotFound from "@/pages/page-not-found";
 

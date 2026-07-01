@@ -14,15 +14,18 @@ import { WS_URL } from "@/shared/api/api-base";
 
 export const VESSELS_QUERY_KEY = ["vessels"] as const;
 
-export interface UseVesselsResult {
+export type UseVesselsResult = {
   vessels: VesselSummary[];
   isLoading: boolean;
   isError: boolean;
   error: ApiError | null;
   recentlyUpdated: ReadonlySet<string>;
-}
+};
 
 /**
+ * Idea is: load the initial data with REST, then keep it updated through WebSocket. The server sends a fresh snapshot on reconnect, so we do not refetch here.
+
+
  * Composes the vessel list query with its live WebSocket feed. The REST
  * fetch establishes the very first paint before the socket has opened;
  * after that, the socket is authoritative and the cache is never

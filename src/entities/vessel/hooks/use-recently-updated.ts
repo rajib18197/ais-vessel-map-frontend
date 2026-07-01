@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { RECENTLY_UPDATED_HIGHLIGHT_MS } from "../lib/constants";
 
-export interface UseRecentlyUpdatedResult {
+type UseRecentlyUpdatedResult = {
   recentlyUpdated: ReadonlySet<string>;
   markUpdated: (id: string) => void;
-}
+};
 
 /**
  * Tracks which IDs were updated within the last N ms, for transient
@@ -29,16 +29,9 @@ export function useRecentlyUpdated(
       if (existingTimer) clearTimeout(existingTimer);
 
       setRecentlyUpdated((prev) => {
-        // Bail out without creating a new Set when `id` is already a
-        // member. The timer above is still cleared and restarted on
-        // every call regardless — what's being short-circuited here is
-        // only the *membership* update, since re-marking an already-
-        // highlighted ID doesn't change what's visible to consumers of
-        // `recentlyUpdated`. This avoids an unnecessary re-render on
-        // every repeat update to the same vessel within one highlight
-        // window, while still correctly extending how long it stays
-        // highlighted.
+        // No need to update state if this ID is already highlighted.
         if (prev.has(id)) return prev;
+
         const next = new Set(prev);
         next.add(id);
         return next;
@@ -59,12 +52,7 @@ export function useRecentlyUpdated(
     [highlightMs],
   );
 
-  // Intentionally unmount-only (`[]`, not `[highlightMs]`). If `highlightMs`
-  // changes while timers are in flight, those timers keep running on their
-  // original duration — only future calls to `markUpdated` pick up the new
-  // value. That's the desired behavior: changing the prop shouldn't reset
-  // pulses that are already mid-flight. This effect's sole job is to make
-  // sure no timer outlives the component itself.
+  // Only clear timers when the component unmounts.
   useEffect(() => {
     const timers = timersRef.current;
 

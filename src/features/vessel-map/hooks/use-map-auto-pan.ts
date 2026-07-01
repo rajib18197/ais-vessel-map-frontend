@@ -23,7 +23,10 @@ export function useMapAutoPan(
       lastFlownMmsiRef.current = null;
       return;
     }
+
+    // Only auto-pan when the user selects a different vessel.
     if (selectedMmsi === lastFlownMmsiRef.current) return;
+
     lastFlownMmsiRef.current = selectedMmsi;
 
     const vessel = vesselsRef.current.find((v) => v.mmsi === selectedMmsi);

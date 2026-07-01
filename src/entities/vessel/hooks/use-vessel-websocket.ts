@@ -8,19 +8,13 @@ import {
 
 export type WsConnectionStatus = "connecting" | "open" | "closed";
 
-interface UseVesselWebSocketOptions {
-  /**
-   * Must be referentially stable across the component's lifetime (a
-   * module-level constant or a value memoized by the caller). The effect
-   * below re-runs whenever `url` changes by value, tearing down and
-   * reopening the socket — correct behavior if the endpoint genuinely
-   * changes, but a silent reconnect-on-every-render bug if a caller ever
-   * passes an inline template literal built from render-local state.
-   */
+type UseVesselWebSocketOptions = {
+  // keep the URL stable to avoid reconnecting on every render.
   url: string;
+
   onEvent: (event: VesselWsEvent) => void;
   onStatusChange?: (status: WsConnectionStatus) => void;
-}
+};
 
 /**
  * Owns the WebSocket connection lifecycle only — parsing, dispatch, and
@@ -32,6 +26,7 @@ interface UseVesselWebSocketOptions {
  * interval, so a downed server isn't hammered with retries forever.
  *
  * `onclose` is the single source of truth for terminal connection state.
+ *
  * `onerror` intentionally does NOT report status — the browser fires
  * `close` immediately after `error` in every mainstream implementation,
  * and routing status through both handlers would mean two code paths
@@ -72,7 +67,9 @@ export function useVesselWebSocket({
       socket = ws;
 
       ws.onopen = () => {
-        attempt = 0; // reset backoff after a successful connection
+        // Reset the retry delay after a successful connection.
+        attempt = 0;
+
         onStatusChangeRef.current?.("open");
       };
 
@@ -89,10 +86,7 @@ export function useVesselWebSocket({
       };
 
       ws.onerror = () => {
-        // Intentionally a no-op for status reporting. See the function
-        // doc comment above: `onclose` owns all terminal-state reporting
-        // and reconnect scheduling, so this handler exists only as a
-        // hook point if failure-specific logging is ever needed.
+        // Intentionally a no-op for status reporting.onclose handles all disconnect and reconnect logic.
       };
 
       ws.onclose = () => {

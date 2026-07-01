@@ -1,12 +1,12 @@
 import VesselDetails from "@/features/vessel-details/components/vessel-details";
 import FeedHeader from "@/features/vessel-feed/components/feed-header";
 import VesselList from "@/features/vessel-feed/components/vessel-list";
-// import { MapCanvas } from "@/features/vessel-map";
 import Sidebar from "@/shared/ui/side-bar";
 import styled from "styled-components";
 import { useVesselTracker } from "../hooks/use-vessel-tracker";
 import { lazy, Suspense } from "react";
 
+// Keep the map lazy-loaded because Leaflet is one of the largest bundles.
 const MapCanvas = lazy(() =>
   import("@/features/vessel-map").then((module) => ({
     default: module.MapCanvas,
@@ -23,10 +23,12 @@ export default function VesselTracker() {
     isError,
     errorMessage,
     isBoundsMode,
+    bounds,
     onVesselSelect,
     onBoundsChange,
   } = useVesselTracker();
 
+  // Bounds mode keeps showing stale data while a new bounds query loads.
   if (isLoading && !isBoundsMode) {
     return <CenteredMessage>Connecting to AIS feed…</CenteredMessage>;
   }
@@ -70,6 +72,8 @@ export default function VesselTracker() {
           selectedMmsi={selectedMmsi}
           onVesselSelect={onVesselSelect}
           onBoundsChange={onBoundsChange}
+          isBoundsMode={isBoundsMode}
+          bounds={bounds}
         />
       </Suspense>
     </Wrapper>

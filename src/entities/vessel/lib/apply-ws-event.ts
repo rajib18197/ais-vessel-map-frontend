@@ -40,7 +40,14 @@ export function applyWsEvent(
     }
 
     case "vessel:updated": {
-      return vessels.map((v) => (v.mmsi === event.data.mmsi ? event.data : v));
+      const index = vessels.findIndex((v) => v.mmsi === event.data.mmsi);
+
+      if (index === -1) return vessels;
+
+      const next = [...vessels];
+      next[index] = event.data;
+
+      return next;
     }
 
     default:

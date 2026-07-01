@@ -165,10 +165,9 @@ The WebSocket hook reconnects automatically with exponential backoff (capped at 
 
 ## Available scripts
 
-| Script               | Description                                    |
-| -------------------- | ---------------------------------------------- |
-| `npm run dev`        | Start the development server                   |
-| `npm run build`      | Production build                               |
-| `npm run preview`    | Preview the production build locally           |
-| `npm run lint`       | Run ESLint                                     |
-| `npm run type-check` | Run TypeScript compiler check without emitting |
+| Script            | Description                          |
+| ----------------- | ------------------------------------ |
+| `npm run dev`     | Start the development server         |
+| `npm run build`   | Production build                     |
+| `npm run preview` | Preview the production build locally |
+| `npm run lint`    | Run ESLint                           |

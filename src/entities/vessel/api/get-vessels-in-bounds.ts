@@ -41,6 +41,7 @@ export async function getVesselsInBounds(
   let body: unknown;
   try {
     body = await res.json();
+    console.log(body, 1765);
   } catch (cause) {
     throw new ApiError(
       "Failed to parse vessels-in-bounds response as JSON",

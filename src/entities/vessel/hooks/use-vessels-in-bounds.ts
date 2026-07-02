@@ -21,7 +21,7 @@ export function useVesselsInBounds(
     queryKey: toBoundsQueryKey(rounded),
     queryFn: () => getVesselsInBounds(rounded as BoundsOptions),
     enabled: enabled && rounded !== null,
-    staleTime: 30_000,
+    staleTime: 0,
     placeholderData: keepPreviousData,
   });
 }

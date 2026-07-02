@@ -14,7 +14,7 @@ That's the kind of thing that's invisible until you go looking for it. The app w
 
 The fix has two parts, and they work together.
 
-**First, I told the bundler to stop treating every dependency as equally urgent.** Vite (via Rolldown, its newer Rust-based bundler) lets you define explicit groups for code splitting. I split things into: the app's own code plus React, a separate file just for Leaflet and its React bindings, and two more small files for TanStack Query and Zod. Instead of one undifferentiated blob, the build now produces several purpose-built files.
+**First, I told the bundler to stop treating every dependency as equally urgent.** Vite (via Rolldown, its newer Rust-based bundler) lets us define explicit groups for code splitting. I split things into: the app's own code plus React, a separate file just for Leaflet and its React bindings, and two more small files for TanStack Query and Zod. Instead of one undifferentiated blob, the build now produces several purpose-built files.
 
 **Second — and this is the part that actually matters — I changed _when_ the map code gets requested.** Using React's `lazy()` and `Suspense`, the Leaflet chunk isn't fetched at all until the moment the map component is about to mount. The browser doesn't even know that file exists until it needs it. While that's loading, the rest of the page — the part that doesn't depend on the map — has already rendered.
 
@@ -33,6 +33,6 @@ That 91.36 KB now contains exactly what's needed to render the initial UI — no
 
 A 46% smaller first-paint bundle doesn't mean the app does less — it means the app stops making people wait for things they don't need yet. The sidebar, header, and layout appear sooner. The map still shows up moments later, and in practice that delay is imperceptible — but it's no longer _blocking_ anything.
 
-This is also, I think, a useful habit more broadly: not every dependency deserves a front-row seat in the critical path. The right question isn't "how do I make the bundle smaller" in the abstract — it's "what does the first screen actually need, and what can wait?" Once you frame it that way, the fix tends to fall out pretty naturally.
+This is also, I think, a useful habit more broadly: not every dependency deserves a front-row seat in the critical path. The right question isn't "how do I make the bundle smaller" in the abstract — it's "what does the first screen actually need, and what can wait?" frame it that way, the fix tends to fall out pretty naturally.
 
 ![Before and after diagram of the bundle splitting](/public/bundle-splitting-diagram.svg)

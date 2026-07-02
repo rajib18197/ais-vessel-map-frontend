@@ -2,7 +2,21 @@
 
 A real-time map that shows vessels moving around a harbor as they actually move — built with React, Leaflet, and a WebSocket connection to an AIS (Automatic Identification System) feed.
 
-![Vessel map with vessel markers and a tooltip](/public/screenshot.png)
+![Vessel map with vessel markers and a tooltip](./docs/demo/UI-AIS-Vessel-Map.png)
+
+### Demo Video
+
+Watch the complete application demo here:
+
+[▶ Watch Demo Video](./docs/demo/AIS-Vessel-Map-demo.mp4)
+
+The video demonstrates:
+
+- AIS vessels displayed on the interactive map
+- Hover tooltip functionality
+- Real-time vessel position updates
+- Map interactions such as zooming and panning
+- displaying only vessels within the visible area
 
 ---
 

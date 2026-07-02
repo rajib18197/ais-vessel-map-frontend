@@ -26,7 +26,7 @@ const GlobalStyles = createGlobalStyle`
   --transition-slow: 300ms ease;
 
   --color-bg: #08131f;
-  --color-surface: #0f1b2c;
+  --color-surface: hsl(210deg 19% 9%/1);
   --color-surface-strong: #121e33;
   --color-surface-muted: #111827;
   --color-text: #e9eff7;

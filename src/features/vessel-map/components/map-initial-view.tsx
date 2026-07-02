@@ -3,7 +3,10 @@ import { useMap } from "react-leaflet";
 import type { VesselSummary } from "@/entities/vessel/types/vessel.types";
 import { getLatLon } from "@/entities/vessel/types/vessel.types";
 import L from "leaflet";
-import { FALLBACK_ZOOM, FIT_BOUNDS_PADDING } from "../constants/vessel-theme";
+import {
+  FALLBACK_ZOOM,
+  FIT_BOUNDS_PADDING,
+} from "@/entities/vessel/lib/vessel-theme";
 
 type MapInitialViewProps = {
   readonly vessels: VesselSummary[];

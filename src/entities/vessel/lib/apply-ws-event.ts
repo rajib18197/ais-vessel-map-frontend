@@ -35,19 +35,22 @@ export function applyWsEvent(
     }
 
     case "vessel:created": {
-      const exists = vessels.some((v) => v.mmsi === event.data.mmsi);
-      return exists ? vessels : [event.data, ...vessels];
+      const count = vessels.filter((v) => v.mmsi === event.data.mmsi).length;
+
+      if (count > 0) {
+        console.warn(
+          "Duplicate create event:",
+          event.data.mmsi,
+          "count:",
+          count,
+        );
+      }
+
+      return count > 0 ? vessels : [event.data, ...vessels];
     }
 
     case "vessel:updated": {
-      const index = vessels.findIndex((v) => v.mmsi === event.data.mmsi);
-
-      if (index === -1) return vessels;
-
-      const next = [...vessels];
-      next[index] = event.data;
-
-      return next;
+      return vessels.map((v) => (v.mmsi === event.data.mmsi ? event.data : v));
     }
 
     default:

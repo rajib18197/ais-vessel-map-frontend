@@ -16,9 +16,9 @@ import {
   FALLBACK_ZOOM,
   TILE_LAYER_ATTRIBUTION,
   TILE_LAYER_URL,
-} from "../constants/vessel-theme";
+} from "@/entities/vessel/lib/vessel-theme";
 import { useMarkerRegistry } from "../hooks/use-marker-registry";
-import { useState } from "react";
+import { useHoverWithGrace } from "../hooks/use-hover-with-grace";
 
 type MapCanvasProps = {
   readonly vessels: VesselSummary[];
@@ -40,7 +40,7 @@ export default function MapCanvas({
   // Only use saved bounds in bounds mode. Otherwise, always show all vessels.
   const activeBounds = isBoundsMode ? bounds : null;
 
-  const [hoveredMmsi, setHoveredMmsi] = useState<string | null>(null);
+  const { hoveredMmsi, onHoverStart, onHoverEnd, clear } = useHoverWithGrace();
 
   const hoveredVessel =
     hoveredMmsi !== null
@@ -51,14 +51,17 @@ export default function MapCanvas({
   const { markersRef, registerMarker } = useMarkerRegistry();
 
   // Keep track of the previously hovered vessel. If it disappears from the feed, clear the hover state.
-  const [prevHoveredVessel, setPrevHoveredVessel] = useState(hoveredVessel);
-
-  if (hoveredVessel !== prevHoveredVessel) {
-    setPrevHoveredVessel(hoveredVessel);
-    if (hoveredVessel === null && hoveredMmsi !== null) {
-      setHoveredMmsi(null);
-    }
+  if (hoveredMmsi !== null && hoveredVessel === null) {
+    clear();
   }
+  // const [prevHoveredVessel, setPrevHoveredVessel] = useState(hoveredVessel);
+
+  // if (hoveredVessel !== prevHoveredVessel) {
+  //   setPrevHoveredVessel(hoveredVessel);
+  //   if (hoveredVessel === null && hoveredMmsi !== null) {
+  //     setHoveredMmsi(null);
+  //   }
+  // }
 
   return (
     <MapWrapper>
@@ -80,18 +83,15 @@ export default function MapCanvas({
             vessel={vessel}
             isSelected={vessel.mmsi === selectedMmsi}
             onSelect={onVesselSelect}
-            onHoverStart={setHoveredMmsi}
-            onHoverEnd={() =>
-              setHoveredMmsi((current) =>
-                current === vessel.mmsi ? null : current,
-              )
-            }
+            onHoverStart={onHoverStart}
+            onHoverEnd={onHoverEnd}
             registerMarker={registerMarker}
           />
         ))}
 
         {/* Restore saved bounds before tracking changes. This prevents URL bounds from being overwritten on page refresh. Must come before `MapBoundsTracker` so URL bounds are restored first. */}
         <MapRestoreBounds bounds={activeBounds} />
+
         <MapInitialView vessels={vessels} skip={activeBounds !== null} />
         <MapAutoPan selectedMmsi={selectedMmsi} vessels={vessels} />
         {onBoundsChange && <MapBoundsTracker onBoundsChange={onBoundsChange} />}

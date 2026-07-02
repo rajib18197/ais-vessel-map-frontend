@@ -1,4 +1,3 @@
-// use-map-auto-pan.ts
 import { useEffect, useRef } from "react";
 import type { Map as LeafletMap } from "leaflet";
 import type { VesselSummary } from "@/entities/vessel/types/vessel.types";

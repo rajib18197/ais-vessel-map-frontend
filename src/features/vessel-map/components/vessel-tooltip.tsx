@@ -3,8 +3,8 @@ import {
   fmtCoord,
   formatLastSeen,
   formatSpeed,
-  resolveTypeName,
 } from "@/entities/vessel/utils/helpers";
+import { resolveTypeName } from "@/entities/vessel/lib/vessel-theme";
 import TooltipRow from "./tooltip-row";
 
 type TooltipField = {

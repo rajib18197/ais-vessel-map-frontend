@@ -22,7 +22,7 @@ import { VesselTooltip } from "./vessel-tooltip";
 
 const TOOLTIP_OFFSET_PX = 16;
 const VIEWPORT_PADDING_PX = 8;
-const TOOLTIP_BG = "#0f172a"; // match your card background
+const TOOLTIP_BG = "var(--color-surface)";
 const EMPTY_RECT = new DOMRect();
 
 type VesselTooltipOverlayProps = {
@@ -67,7 +67,7 @@ export function VesselTooltipOverlay({
       // Keep the tooltip inside the viewport.
       shift({ padding: VIEWPORT_PADDING_PX }),
 
-      arrow({ element: arrowElement ?? undefined }),
+      arrow({ element: arrowElement }),
     ],
 
     // Keep the tooltip position in sync while the map moves or zooms.

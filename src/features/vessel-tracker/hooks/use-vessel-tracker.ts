@@ -8,6 +8,8 @@ import type {
 import { useViewMode } from "@/features/vessel-view-mode/hooks/use-view-mode";
 import { useCallback, useEffect, useState } from "react";
 
+const EMPTY_VESSELS: VesselSummary[] = [];
+
 export type UseVesselTrackerResult = {
   vessels: VesselSummary[];
   selectedMmsi: string | null;
@@ -97,5 +99,5 @@ function deriveVessels({
   boundsData,
 }: DeriveVesselsParams): VesselSummary[] {
   if (!isBoundsMode) return liveVessels;
-  return boundsData ?? [];
+  return boundsData ?? EMPTY_VESSELS;
 }

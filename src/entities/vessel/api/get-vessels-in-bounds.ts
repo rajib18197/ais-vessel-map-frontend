@@ -7,8 +7,7 @@ import {
 import { API_BASE } from "@/shared/api/api-base";
 
 /**
- * Fetches vessels within a geographic bounding box. Failure semantics
- * mirror `getAllVessels`:
+ * Fetches vessels within a geographic bounding box:
  *   1. The request never reached the server (offline, DNS, CORS) → status 0
  *   2. The server responded with a non-2xx status → that HTTP status
  *   3. The server responded 2xx but the body is malformed or schema-
@@ -41,7 +40,6 @@ export async function getVesselsInBounds(
   let body: unknown;
   try {
     body = await res.json();
-    console.log(body, 1765);
   } catch (cause) {
     throw new ApiError(
       "Failed to parse vessels-in-bounds response as JSON",

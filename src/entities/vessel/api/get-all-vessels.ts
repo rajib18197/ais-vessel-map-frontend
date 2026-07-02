@@ -6,13 +6,8 @@ import {
 import { API_BASE } from "@/shared/api/api-base";
 
 /**
- * Fetches the full vessel list. Every failure path below is deliberately
- * caught and re-thrown as `ApiError` — this is what makes
- * `useQuery<VesselSummary[], ApiError>` in `useVessels` an honest contract
- * rather than a type-level promise the implementation doesn't keep.
- *
- * Three distinct failure classes are handled, each with its own status
- * semantics:
+ * Fetches the full vessel list.
+ * Three distinct failure classes are handled:
  *   1. The request never reached the server (offline, DNS, CORS) → status 0
  *   2. The server responded with a non-2xx status → that HTTP status
  *   3. The server responded 2xx but the body isn't the shape we expect,

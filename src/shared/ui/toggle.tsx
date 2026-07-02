@@ -35,38 +35,34 @@ export default Toggle;
 
 const Wrapper = styled.div`
   display: flex;
-  gap: var(--space-sm);
+  gap: var(--space-md);
   isolation: isolate;
-  align-items: center;
-  color: var(--color-text);
 `;
 
 const ToggleButton = styled.button`
   --size: 17px;
-  --padding: calc(var(--size) * 0.12);
+  --padding: calc(var(--size) * 0.1);
   --width: calc(var(--size) * 2 + var(--padding) * 2);
-  --radius: calc(var(--size) * 0.45);
-  --handle-color: var(--color-accent);
-  --color-text: var(--color-surface);
-  --backdrop-color: var(--color-surface-strong);
+  --radius: calc(var(--size) * 0.25);
+  --handle-color: var(--color-primary, white);
+  --color-text: black;
+  --backdrop-color: white;
 
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
+  border: none;
+  background: transparent;
   cursor: pointer;
   position: relative;
   width: var(--width);
   padding: var(--padding);
-  border-radius: calc(var(--size) * 0.8);
 
   &::before {
     content: "";
     position: absolute;
     z-index: 0;
-    top: -6px;
-    left: -6px;
-    right: -6px;
-    bottom: -6px;
-    border-radius: calc(var(--size) * 1.3);
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
   }
 
   &::after {
@@ -79,13 +75,13 @@ const ToggleButton = styled.button`
     bottom: 0;
     margin: auto;
     height: 2px;
-    background: var(--color-text-muted);
+    background: white;
     border-radius: 10px;
   }
 
   &:focus-visible {
-    outline: 2px auto var(--color-brand-600);
-    outline-offset: 3px;
+    outline: 2px auto var(--color-primary);
+    outline-offset: 2px;
   }
 `;
 
@@ -96,8 +92,8 @@ const Ball = styled.span`
   width: var(--size);
   height: var(--size);
   border-radius: 50%;
-  background: var(--handle-color);
-  border: 2px solid var(--color-surface);
-  outline: 2px solid var(--backdrop-color);
+  background: var(--color-surface);
+  border: 2px solid white;
+  outline: 2px solid var(--color-surface);
   transition: transform 400ms cubic-bezier(0.1, 0.78, 0.38, 1.06);
 `;

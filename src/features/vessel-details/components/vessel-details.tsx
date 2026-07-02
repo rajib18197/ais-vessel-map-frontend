@@ -4,8 +4,8 @@ import {
   fmtCoord,
   fmtSog,
   fmtTime,
-  fmtType,
 } from "@/entities/vessel/utils/helpers";
+import { resolveTypeName } from "@/entities/vessel/lib/vessel-theme";
 import {
   fmtNavStatus,
   fmtCallsign,
@@ -39,7 +39,7 @@ export default function VesselDetails({ summary }: VesselDetailsProps) {
         <Dd>{summary.mmsi}</Dd>
 
         <Dt>Type</Dt>
-        <Dd>{fmtType(summary.vesselType)}</Dd>
+        <Dd>{resolveTypeName(summary.vesselType)}</Dd>
 
         <Dt>Lat</Dt>
         <Dd>{fmtCoord(lat)}</Dd>
@@ -123,18 +123,28 @@ export default function VesselDetails({ summary }: VesselDetailsProps) {
 }
 
 const DetailSection = styled.div`
+  --blue-darker: hsl(230deg 40% 24%);
+  --blue-dark: hsl(230deg 40% 28%);
+
   flex: 1;
   border-top: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
+
   background:
     linear-gradient(
-      180deg,
+      calc(180deg - 20deg),
       transparent 0%,
-      rgba(15, 23, 42, 0.25) 40%,
-      rgba(12, 20, 34, 0.9) 100%
+      transparent 50%,
+      hsl(210deg 20% 14% / 0.7) 50%
+    ),
+    linear-gradient(
+      calc(180deg + 20deg),
+      transparent 0%,
+      transparent 50%,
+      hsl(210deg 20% 5% / 0.7) 50%
     ),
     var(--color-surface);
   padding-bottom: var(--space-lg);

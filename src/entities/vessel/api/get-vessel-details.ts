@@ -6,7 +6,7 @@ import {
 import { API_BASE } from "@/shared/api/api-base";
 
 /**
- * Fetches a single vessel by MMSI. Failure semantics mirror `getAllVessels`:
+ * Fetches a single vessel by MMSI:
  *   1. The request never reached the server (offline, DNS, CORS) → status 0
  *   2. The server responded with a non-2xx status → that HTTP status,
  *      with a 404-specific message when the vessel simply doesn't exist
